@@ -1,0 +1,25 @@
+<h2>Listagem das Familias</h2>
+<hr>
+<a href="/admin/familias/add"> <button class="btn btn-success">Nova Familia</button> </a>
+
+{{#each familias}}
+
+    <div class="card">
+        <div class="card-body">
+            <h3>{{nome}}</h3>
+           
+            <a href='/admin/familias/edit/{{_id}}' <button class='btn btn-success mt-2 btn-sm'>Editar</button></a>  
+            
+            <form action="/admin/familias/deletar" method="POST">
+                <input type="hidden" name="id" value="{{_id}}">  
+                <button class='btn btn-danger mt-2 btn-sm '>Apagar </button>
+            </form>
+        </div>
+        
+    </div>
+
+{{else}}
+    
+    <h4 class="mt-3" value="0">Não existe nenhuma Familia Cadastrada</h4> 
+
+{{/each}}
