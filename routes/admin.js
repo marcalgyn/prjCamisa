@@ -115,7 +115,7 @@ router.post('/familias/deletar', (req, res) =>{
 
 router.get('/pedidos', (req, res)=>{
 
-    Pedido.find().sort({date:'desc'}).populate('familia').then((pedidos) =>{
+    Pedido.find().populate('familia').then((pedidos) =>{
         res.render('admin/pedidos', {pedidos: pedidos})
     }).catch((erro) =>{
         req.flash('error_msg', 'Ouve erro ao tentar listar Pedidos. ' + erro)
@@ -182,7 +182,11 @@ router.post('/pedidos/deletar', (req, res) =>{
 router.get('/pedidos/edit/:id', (req, res) =>{
     
     Pedido.findOne({_id: req.params.id}).populate('familia').then((pedido)=>{
-        res.render('admin/editpedidos', {pedido: pedido});
+        
+        Familia.find().then((familia) => {
+            res.render('admin/editpedidos', {pedido: pedido, familia: familia});    
+        })
+        
     }).catch((erro) => {
         req.flash('error_msg', 'Esta Pedido não exite' + erro)
         res.redirect('/admin/pedidos')
@@ -194,15 +198,14 @@ router.get('/pedidos/edit/:id', (req, res) =>{
 router.post('/pedidos/edit', (req, res)=>{
 
     //***** Criar um sistema de validação no futuro nesta parte ******/
-    console.log(req.body._id);
+    
 
     Pedido.findOne({_id: req.body.id}).then((pedido)=>{
         pedido.nome = req.body.nome,
         pedido.tamanho = req.body.tamanho,
         pedido.familia = req.body.familia
-        /* categoria.slug = req.body.slug */
-    
-        familia.save().then(()=>{
+        
+        pedido.save().then(()=>{
             req.flash('success_msg', 'Pedido editado com sucesso!!')
             res.redirect('/pedidos')
         }).catch((erro)=>{
@@ -219,7 +222,7 @@ router.post('/pedidos/edit', (req, res)=>{
 router.get("/vis-familia/:id", (req, res) => {
 
     Famnilia.findOne({ _id: req.params.id }).then((familia) => {
-        res.render("admin/vis-familia", { familia: fammilia })
+        res.render("admin/vis-familia", { familia: familia })
     }).catch((erro) => {
         req.flash('error_msg', 'Familia nao Encontrada ')
         res.redirect('/admin/familia')

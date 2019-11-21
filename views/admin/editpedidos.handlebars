@@ -35,6 +35,11 @@
                             <option>G</option>
                             <option>GG</option>
                             <option>XGG</option>
+                            <option>------</option>
+                            <option>B. Look P</option>
+                            <option>B. Look M</option>
+                            <option>B. Look G</option>
+                            <option>B. Look GG</option>
                         </select>
                     </div>
                 </div>
@@ -42,13 +47,13 @@
                 <div class="col">
                     <label for="familia">Familia</label>
                     
-                    <select name="familias" id="familias" class="custom-select"  >
-                        <option value="{{familias.familia}}">{{familias.nome}}</option>
-                        
-                        {{#each familias}}
-                            <option value="{{familias.nome}}">{{familias.nome}}</option>
+                    
+                    <select name="familia" class="custom-select"  > <!---->
+                        <option value="{{pedido.familia._id}}">{{pedido.familia.nome}}</option>
+                        {{#each familia}}
+                            <option value="{{_id}}">{{nome}}</option>
                         {{else}}
-                            <option value="0">Nenhuma Familia registrada</option>
+                            <option value="{{familia.nome}}">Nenhuma Familia registrada</option>
                         {{/each}}
                     </select>
 
