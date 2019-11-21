@@ -1,3 +1,58 @@
-<h2>Lista de Pedidos</h2>
-<hr>
-<a href="/admin/pedidos/add"> <button class="btn btn-success">Novo Pedido</button> </a>
+
+
+<div class="card">
+    <div class="card-header">
+        <h5>Listagem de Pedidos: <a href="/pedidos/add"> <button class="btn btn-success">Novo Pedido</button> </a> 
+            <a href="/"> <button class="btn btn-dark">Inicio</button> </a>
+        </h5>
+    </div>
+
+    <div class="card-bordy">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nome </th>
+                    <th scope="col">Tamanho</th>
+                    <th scope="col">Familia</th>
+                    <th scope="col">Menus</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each pedidos}}
+                <tr>
+                    <td>{{nome}}</td>
+                    <td>{{tamanho}}</td>
+                    <td> <a href="/familias/edit/{{familia._id}}">
+                                {{familia.nome}} 
+                            </a> 
+                    <td>
+                        <table class="table">
+                            <thead>
+                                <tr><a href='/pedidos/edit/{{_id}}'> <button
+                                        class='btn btn-success  btn-sm'>Editar</button></a>
+                                </tr>
+                                <!--
+                                <tr>
+                                    <form action="/pedidos/deletar" method="POST">
+                                        <input type="hidden" name="id" value="{{_id}}">
+                                        <button class='btn btn-danger btn-sm '>Apagar </button>
+                                    </form>
+                                </tr>
+                                -->
+                            </thead>
+                        </table>
+                    </td>
+
+                </tr>
+
+                {{else}}
+
+                <h4 class="mt-3" value="0">Não existe nenhuma Pedido Cadastrado</h4>
+
+                {{/each}}
+
+
+            </tbody>
+
+        </table>
+    </div>

@@ -50,7 +50,7 @@ const flash = require('connect-flash')
 
 
       //Rotas
-      app.use('/admin', admin)
+      app.use('/', admin)
 
 
       //Outros

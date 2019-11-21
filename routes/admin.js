@@ -2,18 +2,25 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
-require('../models/Familia')
 
+require('../models/Familia')
 const Familia = mongoose.model('familias')
+
+require('../models/Pedido')
+const Pedido = mongoose.model('pedidos')
 
 
 router.get('/', (req, res) =>{
-    res.render('admin/index')
+   res.render('admin/index') 
+   /*  Provisorio
+   res.redirect('/pedidos/add')
+   */
+    
 })
 
 
 router.get('/familias', (req, res) =>{
-    Familia.find().sort({date:'desc'}).then((familias) =>{
+    Familia.find().sort({nome:'desc'}).then((familias) =>{
         res.render('admin/familias', {familias: familias})
     }).catch((erro) =>{
         req.flash('error_msg', 'Ouve erro ao tentar listar Familias' + erro)
@@ -30,19 +37,17 @@ router.post('/familias/nova', (req, res) =>{
 
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null ){
         erros.push({text: 'Nome Invalido'})
+
     } else {
         if (req.body.nome.length < 2 ){
             erros.push({text: 'Nome da Familia muito pequeno'})
         }
     }
-    /*
-    if (!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null ){
-        erros.push({text: 'Slug Invalido'})
-    }
-    */
 
+    
     if (erros.length > 0 ){
-        res.render('admin/addfamilias', {erros: erros})
+        res.render('./addfamilias', {erros: erros})
+        
     }
 
 
@@ -54,10 +59,10 @@ router.post('/familias/nova', (req, res) =>{
 
         new Familia(novaFamilia).save().then(() =>{
         req.flash('success_msg', 'Familia Cadastrada com Sucesso')
-        res.redirect('/admin/familias')
+        res.redirect('/familias')
     }).catch((erro) =>{
         req.flash('error_msg', 'Houve um erro ao salvar cadastro. ' + erro)
-        res.redirect('/admin')
+        res.redirect('/familias/add')
     })
     
 })
@@ -77,37 +82,47 @@ router.post('/familias/edit', (req, res)=>{
 
     //***** Criar um sistema de validação no futuro nesta parte ******/
 
-    Categoria.findOne({_id: req.body.id}).then((familia)=>{
+    Familia.findOne({_id: req.body.id}).then((familia)=>{
         familia.nome = req.body.nome
         /* categoria.slug = req.body.slug */
     
         familia.save().then(()=>{
             req.flash('success_msg', 'Familia editada com sucesso!!')
-            res.redirect('/admin/familias')
+            res.redirect('/familias')
         }).catch((erro)=>{
             req.flash('error_msg', 'Houve um erro interno ao salvar a edição da Familias '+ erro)
-            res.redirect('/admin/familias')
+            res.redirect('/familias')
         })
     }).catch((erro)=>{
         req.flash('error_msg', 'Houve um erro interno ao Editar familia '+ erro)
-        res.redirect('/admin/familias')
+        res.redirect('/familias')
     })
 })
 
 router.post('/familias/deletar', (req, res) =>{
     
-    Categoria.remove({_id: req.body.id}).then(()=>{
+    Familia.remove({_id: req.body.id}).then(()=>{
         req.flash('success_msg', 'Familia removida com sucesso')
-        res.redirect('/admin/familias')
+        res.redirect('/familias')
     }).catch((erro) =>{
         req.flash('error_msg', 'Erro ao tentar remover Cadastro ' + erro)
-        res.redirect('/admin/familias')
+        res.redirect('/familias')
     })
 })
 
 
+
+
 router.get('/pedidos', (req, res)=>{
-    res.render('admin/pedidos')
+
+    Pedido.find().sort({date:'desc'}).populate('familia').then((pedidos) =>{
+        res.render('admin/pedidos', {pedidos: pedidos})
+    }).catch((erro) =>{
+        req.flash('error_msg', 'Ouve erro ao tentar listar Pedidos. ' + erro)
+        res.render('admin/pedidos')
+    })
+
+
 })
 
 router.get('/pedidos/add', (req, res)=>{
@@ -115,14 +130,104 @@ router.get('/pedidos/add', (req, res)=>{
         res.render('admin/addpedido', ({familias: familias}))    
     }).catch((erro) =>{
         req.flash('error_msg', 'Houve erro ao carregar o formulario')
-        res.redirect('/admin')
+        res.redirect('/')
     }) 
     
 })
 
-router.post('pedidos/nova', (req, res) =>{
+router.post('/pedidos/nova', (req, res) =>{
+    var erros = []
+
+    if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null ){
+        erros.push({text: 'Nome Invalido'})
+
+    } else {
+        if (req.body.nome.length < 2 ){
+            erros.push({text: 'Nome da Familia muito pequeno'})
+        }
+    }
+
+    if (erros.length > 0) {
+        res.render('./addpedido', {erros: erros})
+    }
+
+    const novoPedido = {
+        nome: req.body.nome,
+        tamanho: req.body.tamanho,
+        familia: req.body.familia
+    }
+        console.log('Familia e: ' + req.body.familia)
+    new Pedido(novoPedido).save().then(() =>{
+        req.flash('success_msg', 'Pedido Cadastrado com sucesso')
+        res.redirect('/pedidos')
+    }).catch((erro) =>{
+        req.flash('erro_msg', 'Houve um erro ao salvar cadastro')
+        res.redirect('/pedidos/add')
+    })
+
 
 })
+/* Apagar cadastro de Pedidos*/
+router.post('/pedidos/deletar', (req, res) =>{
+    
+    Pedido.remove({_id: req.body.id}).then(()=>{
+        req.flash('success_msg', 'Pedido removido com sucesso')
+        res.redirect('/pedidos')
+    }).catch((erro) =>{
+        req.flash('error_msg', 'Erro ao tentar remover Cadastro ' + erro)
+        res.redirect('/pedidos')
+    })
+})
+
+router.get('/pedidos/edit/:id', (req, res) =>{
+    
+    Pedido.findOne({_id: req.params.id}).populate('familia').then((pedido)=>{
+        res.render('admin/editpedidos', {pedido: pedido});
+    }).catch((erro) => {
+        req.flash('error_msg', 'Esta Pedido não exite' + erro)
+        res.redirect('/admin/pedidos')
+    })
+    
+})
+
+/* Salva edição Cadastro de Pedidos*/
+router.post('/pedidos/edit', (req, res)=>{
+
+    //***** Criar um sistema de validação no futuro nesta parte ******/
+    console.log(req.body._id);
+
+    Pedido.findOne({_id: req.body.id}).then((pedido)=>{
+        pedido.nome = req.body.nome,
+        pedido.tamanho = req.body.tamanho,
+        pedido.familia = req.body.familia
+        /* categoria.slug = req.body.slug */
+    
+        familia.save().then(()=>{
+            req.flash('success_msg', 'Pedido editado com sucesso!!')
+            res.redirect('/pedidos')
+        }).catch((erro)=>{
+            req.flash('error_msg', 'Houve um erro interno ao salvar a edição do Pedido '+ erro)
+            res.redirect('/pedidos')
+        })
+    }).catch((erro)=>{
+        req.flash('error_msg', 'Houve um erro interno ao Editar Pedido '+ erro)
+        res.redirect('/pedidos')
+    })
+})
+
+//Visualizar Registro Familia
+router.get("/vis-familia/:id", (req, res) => {
+
+    Famnilia.findOne({ _id: req.params.id }).then((familia) => {
+        res.render("admin/vis-familia", { familia: fammilia })
+    }).catch((erro) => {
+        req.flash('error_msg', 'Familia nao Encontrada ')
+        res.redirect('/admin/familia')
+    })
+
+})
+
+
 
 
 module.exports = router

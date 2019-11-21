@@ -1,17 +1,12 @@
 const mongoose = require('mongoose')
-const Schemma = mongoose.Schema
+const Schema = mongoose.Schema
 
-const Pedido = new Schemma({
+const Pedido = new Schema({
 
     nome: {
         type: String,
         require: true
     },
-   /* slug: {
-        type: String,
-        require: true
-    },
-    */
     descricao: {
         type: String,
         require: true
@@ -21,7 +16,7 @@ const Pedido = new Schemma({
         require: true
     },
     familia: {
-        type: Schema.types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'familias',
         require: true
     },

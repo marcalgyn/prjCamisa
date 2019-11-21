@@ -13,44 +13,42 @@
 
 <div class="card h-50 d-inline-block">
     <div class="card-header">
-        <h5>Dados Pedido: <a href='/pedidos'> <button class='btn btn-info'>Listar</button></a>
-            <a href="/"> <button class="btn btn-dark">Inicio</button> </a> 
-        </h5>
+        <h5>Dados Pedido: </h5>
     </div>
     <div class="card-body">
-        <form action="/pedidos/nova" method="POST">
+        <form action="/pedidos/edit" method="POST">
+         <input type="hidden" name="id" value="{{pedido._id}}"> 
+            
             <div class="form-row">
                 <div class="col">
                     <label for="nome">Nome:</label>
-                    <input type="text" name="nome" class="form-control " >
+                    <input type="text" name="nome" class="form-control " value="{{pedido.nome}}" >
                 </div>
 
                 <div class="col">
                     <div class="form-group">
                         <label for="tamanho">Tamanho:</label>
-                        <select name="tamanho" id="tamanho" class="form-control">
-                            <option selected>P</option>
+                        <select name="tamanho" id="tamanho" class="form-control" >
+                            <option selected>{{pedido.tamanho}} </option>
+                            <option>P</option>
                             <option>M</option>
                             <option>G</option>
                             <option>GG</option>
                             <option>XGG</option>
-                            <option>------</option>
-                            <option>B. Look P</option>
-                            <option>B. Look M</option>
-                            <option>B. Look G</option>
-                            <option>B. Look GG</option>
-
                         </select>
                     </div>
                 </div>
 
                 <div class="col">
                     <label for="familia">Familia</label>
-                    <select name="familia" class="custom-select">
+                    
+                    <select name="familias" id="familias" class="custom-select"  >
+                        <option value="{{familias.familia}}">{{familias.nome}}</option>
+                        
                         {{#each familias}}
-                        <option value="{{_id}}">{{nome}}</option>
+                            <option value="{{familias.nome}}">{{familias.nome}}</option>
                         {{else}}
-                        <option value="0">Nenhuma Familia registrada</option>
+                            <option value="0">Nenhuma Familia registrada</option>
                         {{/each}}
                     </select>
 
@@ -58,9 +56,7 @@
 
             </div>
             <button class="btn btn-success mt-4" type="submit">Gravar Pedido</button>
-            
         </form>
-        
     </div>
 
 </div>

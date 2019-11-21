@@ -9,7 +9,7 @@
 <hr>
 <div class="card">
     <div class="card-body">
-        <form action="/admin/familias/edit" method="POST">
+        <form action="/familias/edit" method="POST">
          <input type="hidden" name="id" value="{{familia._id}}"> 
             <label for="nome">Nome: </label>
                 <input type="text" id="nome" name="nome" placeholder="Nome da Familia" class="form-control" value="{{familia.nome}}" > 
@@ -17,7 +17,7 @@
             <!-- <label for="slug">Slug: </label>
             <input type="text" id="slug" name="slug" placeholder="Slug da Categoria" class="form-control" value="{{categoria.slug}}">
             -->
-            <button type="submit" class="btn btn-success mt-4" >Editar Familia</button>
+            <button type="submit" class="btn btn-success mt-4" >Salvar Familia</button>
         </form>
     </div>
 </div>

@@ -7,19 +7,21 @@
 
 
 
-<div class="card">
+<div class="card w-75">
     <div class="card-header">
-        <h3>Nova Familia</h3>
+        <h5>Nova Familia: <a href="/familias"> <button class="btn btn-info">Listar Familia</button> </a> 
+        <a href="/"> <button class="btn btn-dark">Inicio</button> </a> 
+        </h5>
     </div>
     
     <div class="card-body">
-        <form action="/admin/familias/nova" method="POST">
+        <form action="/familias/nova" method="POST">
             <label for="nome">Nome: </label>
-                <input type="text" id="nome" name="nome" placeholder="Nome da Categoria" class="form-control"> 
+                <input type="text" id="nome" name="nome" placeholder="Sua Familia" class="form-control" required> 
             <!-- <label for="slug">Slug: </label> 
             <input type="text" id="slug" name="slug" placeholder="Slug da Categoria" class="form-control">
             -->
-            <button type="submit" class="btn btn-success mt-4" >Nova Familia</button>
+            <button type="submit" class="btn btn-success mt-4" >Salvar Familia</button>
         </form>
     </div>
 </div>
