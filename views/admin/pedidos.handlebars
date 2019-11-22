@@ -1,6 +1,6 @@
 
 
-<div class="card">
+<div class="card w-80">
     <div class="card-header">
         <h5>Listagem de Pedidos: <a href="/pedidos/add"> <button class="btn btn-success">Novo Pedido</button> </a> 
             <a href="/"> <button class="btn btn-dark">Inicio</button> </a>
@@ -31,7 +31,7 @@
                                 <tr><a href='/pedidos/edit/{{_id}}'> <button
                                         class='btn btn-success  btn-sm'>Editar</button></a>
                                 </tr>
-                                
+                    
                                 <tr>
                                     <form action="/pedidos/deletar" method="POST">
                                         <input type="hidden" name="id" value="{{_id}}">
