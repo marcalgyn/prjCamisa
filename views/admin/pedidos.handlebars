@@ -15,6 +15,7 @@
                     <th scope="col">Tamanho</th>
                     <th scope="col">Familia</th>
                     <th scope="col">Menus</th>
+                    <th scope="col">PAGAR VIA PIX</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,14 +34,21 @@
                                 </tr>
                     
                                 <tr>
+                                    <!--
                                     <form action="/pedidos/deletar" method="POST">
                                         <input type="hidden" name="id" value="{{_id}}">
                                         <button class='btn btn-danger btn-sm '>Apagar </button>
                                     </form>
+                                    -->
                                 </tr>
-                                
+                                                                
                             </thead>
                         </table>
+                    </td>
+                    <td>
+                        <a href='https://qrlogo.io/app/qrcodes/403573/preview' target="_blank">
+                            <button class='btn btn-primary btn-sm'>GERAR QRCODE</button></a>
+                                
                     </td>
 
                 </tr>

@@ -1,14 +1,23 @@
 // Arquivo Principal
 //# Carregando Modulos
 const express = require('express')
-const handlebars = require('express-handlebars')
-const bodyParser = require('body-parser')
+//provisorio const handlebars = require('express-handlebars')
 const app = express()
+const bodyParser = require('body-parser')
+
 const admin = require('./routes/admin')
 const path = require('path')
 const mongoose = require('mongoose')
 const session = require('express-session')
 const flash = require('connect-flash')
+
+//Teste 
+const Handlebars = require('handlebars')
+const expressHandlebars = require('express-handlebars');
+
+
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+//const insecureHandlebars = allowInsecurePrototypeAccess(handlebars)                                                  
 
 
 //Configurações
@@ -34,12 +43,26 @@ const flash = require('connect-flash')
       app.use(bodyParser.json())
 
       //Handlebars
-      app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
-      app.set('view engine', 'handlebars')
+          //  app.engine('handlebars',  handlebars({ defaultLayout: 'main' })) 
+    
+    //** Removido Provisorio
+    // app.engine('handlebars',  handlebars.engine({ defaultLayout: 'main' }))
+    // app.set('view engine', 'handlebars')   
+     
 
+    
+    app.engine('handlebars', expressHandlebars.engine({
+        handlebars: allowInsecurePrototypeAccess(Handlebars)
+    }));
+    app.set('view engine', 'handlebars');
+
+
+   
+      
+               
       //Mangoose
       mongoose.Promise = global.Promise;
-      mongoose.connect("mongodb://localhost/prjcamisa").then(() => {
+      mongoose.connect("mongodb://127.0.0.1/prjcamisa").then(() => {
       console.log('Conectado ao mongo..')
       }).catch((erro) => {
       console.log('Erro ao se conectar: ' + erro);

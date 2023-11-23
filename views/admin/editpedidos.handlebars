@@ -17,7 +17,8 @@
     </div>
     <div class="card-body">
         <form action="/pedidos/edit" method="POST">
-         <input type="hidden" name="id" value="{{pedido._id}}"> 
+        
+         <input type="hidden" name="id" value="{{this.pedido._id}}"> 
             
             <div class="form-row">
                 <div class="col">
@@ -47,7 +48,7 @@
                 <div class="col">
                     <label for="familia">Familia</label>
                     
-                    
+               
                     <select name="familia" class="custom-select"  > <!---->
                         <option value="{{pedido.familia._id}}">{{pedido.familia.nome}}</option>
                         {{#each familia}}
@@ -56,10 +57,13 @@
                             <option value="{{familia.nome}}">Nenhuma Familia registrada</option>
                         {{/each}}
                     </select>
+        
 
                 </div>
 
             </div>
+      
+
             <button class="btn btn-success mt-4" type="submit">Gravar Pedido</button>
         </form>
     </div>

@@ -9,6 +9,9 @@ const Familia = mongoose.model('familias')
 require('../models/Pedido')
 const Pedido = mongoose.model('pedidos')
 
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+
+
 
 router.get('/', (req, res) =>{
    res.render('admin/index') 
@@ -21,7 +24,9 @@ router.get('/', (req, res) =>{
 
 router.get('/familias', (req, res) =>{
     Familia.find().sort({nome:'desc'}).then((familias) =>{
-        res.render('admin/familias', {familias: familias})
+        //res.render('admin/familias', {familias: familias})
+        res.render('admin/familias', {
+            familias: familias.map(familia => familia.toJSON() )})
     }).catch((erro) =>{
         req.flash('error_msg', 'Ouve erro ao tentar listar Familias' + erro)
     })
@@ -71,9 +76,10 @@ router.post('/familias/nova', (req, res) =>{
 router.get('/familias/edit/:id', (req, res) =>{
     Familia.findOne({_id: req.params.id}).then((familia)=>{
         res.render('admin/editfamilias', {familia: familia});
+
     }).catch((erro) => {
         req.flash('error_msg', 'Esta Familia não exite' + erro)
-        res.redirect('/admin/familias')
+        res.redirect('/admin/familias..')
     })
     
 })
@@ -81,6 +87,8 @@ router.get('/familias/edit/:id', (req, res) =>{
 router.post('/familias/edit', (req, res)=>{
 
     //***** Criar um sistema de validação no futuro nesta parte ******/
+console.log("_id", req.body.id)
+console.log("retorno ID", req.body.id)
 
     Familia.findOne({_id: req.body.id}).then((familia)=>{
         familia.nome = req.body.nome
@@ -101,7 +109,8 @@ router.post('/familias/edit', (req, res)=>{
 
 router.post('/familias/deletar', (req, res) =>{
     
-    Familia.remove({_id: req.body.id}).then(()=>{
+    //Familia.remove({_id: req.body.id}).then(()=>{
+    Familia.deleteOne({_id: req.body.id}).then(()=>{
         req.flash('success_msg', 'Familia removida com sucesso')
         res.redirect('/familias')
     }).catch((erro) =>{
@@ -116,7 +125,10 @@ router.post('/familias/deletar', (req, res) =>{
 router.get('/pedidos', (req, res)=>{
 
     Pedido.find().populate('familia').then((pedidos) =>{
-        res.render('admin/pedidos', {pedidos: pedidos})
+        //res.render('admin/pedidos', {pedidos: pedidos})
+        res.render('admin/pedidos', {
+            pedidos: pedidos.map(pedido => pedido.toJSON() )})
+
     }).catch((erro) =>{
         req.flash('error_msg', 'Ouve erro ao tentar listar Pedidos. ' + erro)
         res.render('admin/pedidos')
@@ -127,7 +139,10 @@ router.get('/pedidos', (req, res)=>{
 
 router.get('/pedidos/add', (req, res)=>{
     Familia.find().then((familias) =>{
-        res.render('admin/addpedido', ({familias: familias}))    
+       // res.render('admin/addpedido', ({familias: familias}))    
+       res.render('admin/addpedido', {
+        familias: familias.map(familia => familia.toJSON() )})
+
     }).catch((erro) =>{
         req.flash('error_msg', 'Houve erro ao carregar o formulario')
         res.redirect('/')
@@ -184,7 +199,8 @@ router.get('/pedidos/edit/:id', (req, res) =>{
     Pedido.findOne({_id: req.params.id}).populate('familia').then((pedido)=>{
         
         Familia.find().then((familia) => {
-            res.render('admin/editpedidos', {pedido: pedido, familia: familia});    
+            res.render('admin/editpedidos', {pedido: pedido, familia: familia}); 
+
         })
         
     }).catch((erro) => {
