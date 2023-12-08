@@ -246,7 +246,11 @@ router.get("/vis-familia/:id", (req, res) => {
 
 })
 
-
+router.get('/visualizaqrcode', (req, res)=> {
+    res.render('admin/visualizaqrcode', {
+        
+    })
+} )
 
 
 module.exports = router

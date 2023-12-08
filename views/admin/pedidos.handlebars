@@ -9,7 +9,7 @@
 
     <div class="card-bordy">
         <table class="table table-striped">
-            <thead class="thead-dark">
+            <thead class="table-primary">
                 <tr>
                     <th scope="col">Nome </th>
                     <th scope="col">Tamanho</th>
@@ -29,8 +29,8 @@
                     <td>
                         <table class="table">
                             <thead>
-                                <tr><a href='/pedidos/edit/{{_id}}'> <button
-                                        class='btn btn-success  btn-sm'>Editar</button></a>
+                                <tr><!-- a href='/pedidos/edit/{{_id}}'> <button
+                                        class='btn btn-success  btn-sm'>Editar</button></a -->
                                 </tr>
                     
                                 <tr>
@@ -46,9 +46,9 @@
                         </table>
                     </td>
                     <td>
-                        <a href='https://qrlogo.io/app/qrcodes/403573/preview' target="_blank">
-                            <button class='btn btn-primary btn-sm'>GERAR QRCODE</button></a>
-                                
+                        <a href='/visualizaqrcode'>
+                            <button class='btn btn-primary btn-sm'>GERAR QRCODE</button>
+                        </a>
                     </td>
 
                 </tr>
